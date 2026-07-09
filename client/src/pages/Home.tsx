@@ -101,22 +101,9 @@ export default function Home() {
     return () => observer.disconnect();
   }, []);
 
-  useEffect(() => {
-    const cards = document.querySelectorAll<HTMLElement>("[data-practice]");
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveArea(Number(entry.target.getAttribute("data-practice") ?? 0));
-          }
-        });
-      },
-      { threshold: 0.7 }
-    );
-
-    cards.forEach((card) => observer.observe(card));
-    return () => observer.disconnect();
-  }, []);
+  const handlePracticeSelect = (index: number) => {
+    setActiveArea(index);
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -137,7 +124,7 @@ export default function Home() {
 
       <section
         id="inicio"
-        className="relative isolate overflow-hidden bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.22),_transparent_42%),linear-gradient(125deg,_#0d2137_0%,_#173b5e_45%,_#0d2137_100%)] px-0 py-24 sm:py-28 lg:py-32"
+        className="scroll-mt-24 relative isolate overflow-hidden bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.22),_transparent_42%),linear-gradient(125deg,_#0d2137_0%,_#173b5e_45%,_#0d2137_100%)] px-0 py-24 sm:py-28 lg:py-32"
       >
         <div className="absolute inset-0 opacity-25">
           <div className="absolute left-[-8%] top-[-12%] h-56 w-56 rounded-full bg-[#d4a84f] blur-3xl" />
@@ -230,7 +217,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="servicos" className="py-20">
+      <section id="servicos" className="scroll-mt-24 py-20">
         <div className="container">
           <div className="mx-auto max-w-3xl text-center">
             <div className="reveal inline-flex items-center gap-2 rounded-full bg-[#173b5e]/8 px-4 py-2 text-sm font-semibold text-[#173b5e]">
@@ -246,12 +233,18 @@ export default function Home() {
           </div>
 
           <div className="mt-12 grid gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
-            <div className="space-y-3">
+            <div className="space-y-4">
               {PRACTICE_AREAS.map((area, index) => (
-                <div
+                <button
                   key={area.title}
-                  data-practice={index}
-                  className={`reveal rounded-[1.5rem] border p-5 transition-all duration-300 ${activeArea === index ? "border-[#d4a84f] bg-[#173b5e] text-white shadow-lg" : "border-[#e8dfcf] bg-white/80 text-[#173b5e]"}`}
+                  type="button"
+                  onClick={() => handlePracticeSelect(index)}
+                  className={`w-full rounded-[1.5rem] border p-5 text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4a84f]/50 ${
+                    activeArea === index
+                      ? "border-[#d4a84f] bg-[#173b5e] text-white shadow-lg"
+                      : "border-[#e8dfcf] bg-white/90 text-[#173b5e]"
+                  }`}
+                  aria-selected={activeArea === index}
                 >
                   <div className="flex items-center justify-between gap-3">
                     <div>
@@ -260,12 +253,12 @@ export default function Home() {
                     </div>
                     <ChevronRight size={18} className={activeArea === index ? "rotate-90 text-[#d4a84f]" : "text-slate-400"} />
                   </div>
-                </div>
+                </button>
               ))}
             </div>
 
             <div className="reveal lg:sticky lg:top-24">
-              <div className="rounded-[2rem] border border-[#e8dfcf] bg-[#0d2137] p-8 text-white shadow-[0_30px_80px_rgba(13,33,55,0.22)] sm:p-10">
+              <div className="rounded-[2rem] border border-[#e8dfcf] bg-gradient-to-br from-[#0e2640] via-[#0d2137] to-[#0b1b30] p-8 text-white shadow-[0_40px_100px_rgba(10,25,49,0.18)] sm:p-10">
                 <div className="flex items-center gap-2 text-sm font-semibold text-[#d4a84f]">
                   <Gavel size={16} />
                   Destaque do momento
@@ -286,7 +279,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="sobre" className="py-20 bg-[#f1e7d6]">
+      <section id="sobre" className="scroll-mt-24 py-20 bg-[#f1e7d6]">
         <div className="container">
           <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
             <div className="reveal overflow-hidden rounded-[2rem] border border-[#e8dfcf] shadow-lg">
@@ -377,7 +370,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="contato" className="py-20">
+      <section id="contato" className="scroll-mt-24 py-20">
         <div className="container">
           <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr]">
             <div className="reveal">
